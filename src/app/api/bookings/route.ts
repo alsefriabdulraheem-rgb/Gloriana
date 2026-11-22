@@ -26,7 +26,10 @@ export const POST = api(async (req: Request) => {
   if (b.customerName && !user.full_name) await sql`update users set full_name = ${b.customerName} where id = ${user.id}`;
   const booking = await createBooking({ ...b, customerId: user.id, onlinePaymentsAvailable: paymentProvider().isConfigured() });
   let checkoutUrl: string | null = null;
-  if (booking.status === "pending_payment") checkoutUrl = (await startCheckout(booking.id, user.id)).url;
+  if (booking.status === "pending_payment") {
+    // If the gateway is briefly unavailable the slot stays held; the customer can retry "Pay now" from the booking page.
+    try { checkoutUrl = (await startCheckout(booking.id, user.id)).url; } catch (e) { console.error("checkout start failed", (e as Error).message); }
+  }
   return { reference: booking.reference, status: booking.status, checkoutUrl };
 });
 

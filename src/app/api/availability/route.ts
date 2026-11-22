@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { api } from "@/lib/api";
 import { getAvailability } from "@/lib/booking/service";
+import { rateLimit } from "@/lib/rate-limit";
+import { headers } from "next/headers";
+import { clientIp } from "@/lib/auth/session";
 
 const Q = z.object({
   salonId: z.string().uuid(), branchId: z.string().uuid(),
@@ -12,6 +15,7 @@ const Q = z.object({
 export const dynamic = "force-dynamic";
 
 export const GET = api(async (req: Request) => {
+  await rateLimit(`avail:${clientIp(await headers()) ?? "anon"}`, 300, 60);
   const q = Q.parse(Object.fromEntries(new URL(req.url).searchParams));
   const r = await getAvailability(q);
   return new Response(JSON.stringify(r), { headers: { "content-type": "application/json", "cache-control": "no-store" } });

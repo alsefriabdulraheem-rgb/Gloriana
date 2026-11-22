@@ -44,8 +44,8 @@ export function env(): Env {
   if (!parsed.success) {
     throw new Error("Invalid environment: " + parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "));
   }
-  if (parsed.data.NODE_ENV === "production" && parsed.data.SMS_PROVIDER === "console") {
-    throw new Error("SMS_PROVIDER=console is not allowed in production");
+  if (parsed.data.NODE_ENV === "production" && parsed.data.SMS_PROVIDER === "console" && process.env.ALLOW_CONSOLE_SMS_IN_PRODUCTION_BUILD !== "1") {
+    throw new Error("SMS_PROVIDER=console is not allowed in production (set ALLOW_CONSOLE_SMS_IN_PRODUCTION_BUILD=1 only for local QA of a production build)");
   }
   cached = parsed.data;
   return cached;

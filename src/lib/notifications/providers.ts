@@ -33,7 +33,7 @@ export async function sendSms(to: string, body: string): Promise<SendResult> {
         return r.ok ? { ok: true, ref: String(j.messageId ?? "") } : { ok: false, error: j.message ?? `HTTP ${r.status}` };
       }
       case "console":
-        if (e.NODE_ENV === "production") return { ok: false, error: "console SMS provider disabled in production" };
+        if (e.NODE_ENV === "production" && process.env.ALLOW_CONSOLE_SMS_IN_PRODUCTION_BUILD !== "1") return { ok: false, error: "console SMS provider disabled in production" };
         console.info(`[sms:console] to=${to} body=${body}`);
         return { ok: true, ref: "console" };
       default:
