@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #1c1620;
+  --color-muted: #6f6675;
+  --color-line: #ebe5ea;
+  --color-paper: #fbf9f7;
+  --color-plum-50: #f8f1f6;
+  --color-plum-100: #efdeea;
+  --color-plum-200: #ddbcd3;
+  --color-plum-500: #8c3f74;
+  --color-plum-600: #74315f;
+  --color-plum-700: #5c264c;
+  --color-plum-900: #2e1226;
+  --color-gold-300: #e6cf9e;
+  --color-gold-500: #c49a4a;
+  --color-slate-men: #1f2a33;
+  --color-teal-men: #2f6f73;
+  --font-sans: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, system-ui, sans-serif;
+  --font-display: "Playfair Display", "IBM Plex Sans Arabic", Georgia, serif;
+  --radius-xl2: 1.25rem;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans); }
+:focus-visible { outline: 2px solid var(--color-plum-500); outline-offset: 2px; }
+
+@layer components {
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-plum-700 text-white hover:bg-plum-600 shadow-sm; }
+  .btn-gold { @apply btn bg-gold-500 text-white hover:brightness-110; }
+  .btn-outline { @apply btn border border-line bg-white text-ink hover:border-plum-200 hover:bg-plum-50; }
+  .btn-ghost { @apply btn text-plum-700 hover:bg-plum-50; }
+  .btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .card { @apply rounded-2xl border border-line bg-white shadow-[0_1px_2px_rgba(28,22,32,0.04)]; }
+  .input { @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-muted/70 focus:border-plum-500 focus:ring-2 focus:ring-plum-100; }
+  .label { @apply mb-1.5 block text-xs font-semibold text-muted; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full border border-line bg-white px-3 py-1 text-xs font-medium; }
+  .badge { @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold; }
+  .h-section { @apply font-display text-2xl font-semibold tracking-tight sm:text-3xl; }
+  .table { @apply w-full text-sm; }
+  .table th { @apply border-b border-line px-3 py-2 text-start text-xs font-semibold text-muted whitespace-nowrap; }
+  .table td { @apply border-b border-line/70 px-3 py-2.5 align-top; }
+}
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+}
