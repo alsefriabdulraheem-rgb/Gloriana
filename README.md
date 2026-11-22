@@ -124,7 +124,7 @@ To switch from test to live payments, change the Moyasar keys from `sk_test_` to
 2. **Migrate.** Run `DATABASE_URL=... npm run db:migrate`.
 3. **Create the first admin.** Run `ADMIN_PASSWORD='…' npx tsx scripts/create-admin.ts admin@yourdomain.sa +9665XXXXXXXX "Name"`. Use `npm run db:seed` on staging only.
 4. **Deploy.** Deploy to Vercel or any Node 20+ host with `npm run build && npm start`, and set every variable in `.env.example`.
-5. **Schedule the cron worker.** Run `/api/cron/tick` every minute. `vercel.json` already declares it; per-minute cron needs Vercel Pro. Otherwise use Supabase `pg_cron` + `pg_net`, or any external scheduler, sending `Authorization: Bearer $CRON_SECRET`.
+5. **Schedule the cron worker.** `npm run supabase:setup` schedules `/api/cron/tick` every minute with Supabase pg_cron. `vercel.json` only has a daily fallback because the Vercel Hobby plan rejects more frequent crons. Full Arabic guide: `docs/DEPLOYMENT.md`.
 6. **Configure the gateway webhook** in the Moyasar dashboard.
 
 ## Launch checklist

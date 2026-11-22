@@ -4,7 +4,7 @@ import path from "node:path";
 import postgres from "postgres";
 
 export async function migrate(url: string, log = true) {
-  const sql = postgres(url, { max: 1, onnotice: () => {} });
+  const sql = postgres(url, { max: 1, onnotice: () => {}, prepare: !url.includes("pooler.supabase.com") });
   try {
     await sql`create table if not exists schema_migrations (name text primary key, applied_at timestamptz not null default now())`;
     const dir = path.join(process.cwd(), "db", "migrations");
@@ -25,7 +25,8 @@ export async function migrate(url: string, log = true) {
 }
 
 if (process.argv[1]?.endsWith("migrate.ts")) {
-  migrate(process.env.DATABASE_URL!).then(() => console.log("migrations complete"), (e) => {
+  // Prefer a direct / session-mode URL for DDL (Supabase: port 5432), falling back to DATABASE_URL.
+  migrate(process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL!).then(() => console.log("migrations complete"), (e) => {
     console.error(e);
     process.exit(1);
   });
